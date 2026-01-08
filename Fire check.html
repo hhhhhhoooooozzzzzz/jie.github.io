@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消防器材检查工作流管理系统</title>
+    <style>
+        :root {
+            --primary-color: #d32f2f;
+            --secondary-color: #4CAF50;
+            --light-bg: #f5f5f5;
+            --card-bg: white;
+            --border-color: #ddd;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--light-bg);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .section {
+            margin: 25px 0;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        
+        .form-group {
+            margin: 18px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background-color: #b71c1c;
+        }
+        
+        .export-btn {
+            background-color: var(--secondary-color);
+        }
+        
+        .export-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .signature-pad {
+            border: 1px solid #ccc;
+            background: white;
+            cursor: crosshair;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f8f8f8;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f0f8ff;
+        }
+        
+        .operator-section {
+            background-color: #e8f5e8;
+            border-color: #c8e6c9;
+        }
+        
+        .form-section {
+            background-color: #fff3e0;
+            border-color: #ffe0b2;
+        }
+        
+        .history-section {
+            overflow-x: auto;
+        }
+        
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>消防器材检查工作流管理系统</h1>
+            <p class="subtitle">确保消防安全，规范检查流程</p>
+        </header>
+        
+        <section class="section operator-section">
+            <h2>操作员信息</h2>
+            <div class="form-group">
+                <label for="operator-name">操作员姓名:</label>
+                <input type="text" id="operator-name" placeholder="请输入您的姓名">
+            </div>
+            <div class="form-group">
+                <label for="operator-id">工号:</label>
+                <input type="text" id="operator-id" placeholder="请输入您的工号">
+            </div>
+        </section>
+
+        <section class="section form-section">
+            <h2>消防器材检查记录</h2>
+            <div class="form-group">
+                <label for="equipment-type">器材类型:</label>
+                <select id="equipment-type">
+                    <option value="灭火器">灭火器</option>
+                    <option value="消防栓">消防栓</option>
+                    <option value="烟感器">烟感器</option>
+                    <option value="喷淋系统">喷淋系统</option>
+                    <option value="应急照明">应急照明</option>
+                    <option value="其他">其他</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="location">位置:</label>
+                <input type="text" id="location" placeholder="请输入器材位置">
+            </div>
+            
+            <div class="form-group">
+                <label for="equipment-id">器材编号:</label>
+                <input type="text" id="equipment-id" placeholder="请输入器材编号">
+            </div>
+            
+            <div class="form-group">
+                <label for="check-date">检查日期:</label>
+                <input type="date" id="check-date">
+            </div>
+            
+            <div class="form-group">
+                <label for="status">检查状态:</label>
+                <select id="status">
+                    <option value="正常">正常</option>
+                    <option value="异常">异常</option>
+                    <option value="需更换">需更换</option>
+                    <option value="需维修">需维修</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="notes">备注:</label>
+                <textarea id="notes" rows="3" placeholder="请输入检查备注"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>签名确认:</label>
+                <canvas id="signature-pad" class="signature-pad" width="600" height="200"></canvas>
+                <div class="btn-group">
+                    <button type="button" onclick="clearSignature()">清除签名</button>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button onclick="submitCheck()">提交检查记录</button>
+            </div>
+        </section>
+        
+        <section class="section history-section">
+            <h2>检查历史记录</h2>
+            <div class="btn-group">
+                <button class="export-btn" onclick="exportToExcel()">导出Excel</button>
+            </div>
+            <div class="history-section">
+                <table id="history-table">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>器材类型</th>
+                            <th>位置</th>
+                            <th>器材编号</th>
+                            <th>检查日期</th>
+                            <th>检查状态</th>
+                            <th>操作员</th>
+                            <th>工号</th>
+                            <th>签名信息</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-tbody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 模拟签名画布
+        const canvas = document.getElementById('signature-pad');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        
+        // 初始化画布
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#000';
+        
+        // 画布事件监听
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath();
+        }
+        
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        // 模拟数据库
+        let checkRecords = JSON.parse(localStorage.getItem('fireCheckRecords')) || [];
+        
+        // 提交检查记录
+        function submitCheck() {
+            const operatorName = document.getElementById('operator-name').value;
+            const operatorId = document.getElementById('operator-id').value;
+            const equipmentType = document.getElementById('equipment-type').value;
+            const location = document.getElementById('location').value;
+            const equipmentId = document.getElementById('equipment-id').value;
+            const checkDate = document.getElementById('check-date').value;
+            const status = document.getElementById('status').value;
+            const notes = document.getElementById('notes').value;
+            
+            if(!operatorName || !operatorId) {
+                alert('请填写操作员信息');
+                return;
+            }
+            
+            if(!equipmentType || !location || !equipmentId || !checkDate) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            // 获取签名数据
+            const signatureData = canvas.toDataURL();
+            
+            // 创建检查记录
+            const record = {
+                id: Date.now(),
+                equipmentType,
+                location,
+                equipmentId,
+                checkDate,
+                status,
+                notes,
+                operator: operatorName,
+                operatorId: operatorId,
+                signature: signatureData, // 保存签名的base64数据
+                timestamp: new Date().toISOString()
+            };
+            
+            checkRecords.push(record);
+            localStorage.setItem('fireCheckRecords', JSON.stringify(checkRecords));
+            
+            // 清空表单
+            document.getElementById('location').value = '';
+            document.getElementById('equipment-id').value = '';
+            document.getElementById('notes').value = '';
+            clearSignature();
+            
+            alert('检查记录提交成功！');
+            loadHistory();
+        }
+        
+        // 加载历史记录
+        function loadHistory() {
+            const tbody = document.getElementById('history-tbody');
+            tbody.innerHTML = '';
+            
+            checkRecords.forEach((record, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${record.equipmentType}</td>
+                    <td>${record.location}</td>
+                    <td>${record.equipmentId}</td>
+                    <td>${record.checkDate}</td>
+                    <td>${record.status}</td>
+                    <td>${record.operator}</td>
+                    <td>${record.operatorId}</td>
+                    <td>已签名</td>
+                `;
+            });
+        }
+        
+        // 导出Excel功能
+        function exportToExcel() {
+            if(checkRecords.length === 0) {
+                alert('没有数据可导出');
+                return;
+            }
+            
+            // 创建CSV内容
+            let csvContent = '序号,器材类型,位置,器材编号,检查日期,检查状态,备注,操作员,工号,时间戳\n';
+            
+            checkRecords.forEach((record, index) => {
+                // 转义可能包含逗号的内容
+                const escapedNotes = record.notes ? record.notes.replace(/"/g, '""') : '';
+                csvContent += `"${index + 1}","${record.equipmentType}","${record.location}","${record.equipmentId}","${record.checkDate}","${record.status}","${escapedNotes}","${record.operator}","${record.operatorId}","${record.timestamp}"\n`;
+            });
+            
+            // 创建下载链接
+            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `消防器材检查记录_${new Date().toISOString().slice(0, 10)}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert('数据已导出为CSV文件，包含签名和时间信息');
+        }
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedRecords = localStorage.getItem('fireCheckRecords');
+            if(savedRecords) {
+                checkRecords = JSON.parse(savedRecords);
+            }
+            loadHistory();
+            
+            // 设置默认检查日期为今天
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('check-date').value = today;
+        });
+    </script>
+</body>
+</html>
